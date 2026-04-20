@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>今日精选报告</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            font-family: "PingFang SC", "Microsoft YaHei", sans-serif;
+            background: #f5f7fa;
+            padding: 15px;
+        }
+        .header {
+            text-align: center;
+            padding: 15px 0;
+            font-size: 18px;
+            font-weight: bold;
+        }
+        .card {
+            background: white;
+            border-radius: 12px;
+            padding: 18px;
+            margin-bottom: 12px;
+            line-height: 1.6;
+        }
+        .title {
+            font-weight: bold;
+            margin-bottom: 8px;
+            color: #222;
+        }
+        .content {
+            color: #444;
+            font-size: 15px;
+        }
+        .copy-btn {
+            background: #3b7ef6;
+            color: white;
+            padding: 12px;
+            text-align: center;
+            border-radius: 8px;
+            margin-top: 10px;
+        }
+        .back {
+            text-align: center;
+            margin-top: 20px;
+        }
+        .back a {
+            color: #3b7ef6;
+            text-decoration: none;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="header">今日精选报告</div>
+
+    <div class="card">
+        <div class="title">市场简述</div>
+        <div class="content">大盘震荡上行，题材活跃，资金聚焦科技、新能源方向。</div>
+    </div>
+
+    <div class="card">
+        <div class="title">今日精选3只</div>
+        <div class="content">
+            600519 贵州茅台<br>
+            300750 宁德时代<br>
+            603019 中科曙光
+        </div>
+        <div class="copy-btn" onclick="copy()">一键复制代码</div>
+    </div>
+
+    <div class="back">
+        <a href="index.html">← 返回首页</a>
+    </div>
+
+    <script>
+        function copy(){
+            let text = "600519\n300750\n603019";
+            navigator.clipboard.writeText(text);
+            alert("复制成功！");
+        }
+    </script>
+
+</body>
+</html>
