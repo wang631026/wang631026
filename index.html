@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>龙头猎手 · 每日选股</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            font-family: "PingFang SC", "Microsoft YaHei", sans-serif;
+            background: #f5f7fa;
+            padding: 15px;
+        }
+        .header {
+            text-align: center;
+            padding: 15px 0 25px;
+            font-size: 20px;
+            font-weight: bold;
+            color: #222;
+        }
+        .card {
+            background: white;
+            border-radius: 12px;
+            padding: 18px;
+            margin-bottom: 12px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+        }
+        .stock-title {
+            display: flex;
+            justify-content: space-between;
+            font-size: 16px;
+            font-weight: bold;
+            margin-bottom: 8px;
+        }
+        .stock-info {
+            font-size: 14px;
+            color: #666;
+            margin-bottom: 6px;
+        }
+        .red { color: #f23838; }
+        .green { color: #009944; }
+        .star { color: #ff9c00; }
+        .btns {
+            display: flex;
+            gap: 10px;
+            margin-top: 20px;
+        }
+        .btn {
+            flex: 1;
+            background: #3b7ef6;
+            color: white;
+            text-align: center;
+            padding: 12px 0;
+            border-radius: 8px;
+            font-size: 15px;
+            text-decoration: none;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="header">📈 龙头猎手 · 每日精选</div>
+
+    <div class="card">
+        <div class="stock-title">
+            <span>贵州茅台 600519</span>
+            <span class="red">+2.35%</span>
+        </div>
+        <div class="stock-info">热度：⭐⭐⭐⭐⭐</div>
+        <div class="stock-info">逻辑：白酒龙头 + 资金流入</div>
+    </div>
+
+    <div class="card">
+        <div class="stock-title">
+            <span>宁德时代 300750</span>
+            <span class="red">+1.82%</span>
+        </div>
+        <div class="stock-info">热度：⭐⭐⭐⭐</div>
+        <div class="stock-info">逻辑：新能源赛道企稳</div>
+    </div>
+
+    <div class="card">
+        <div class="stock-title">
+            <span>中科曙光 603019</span>
+            <span class="red">+3.11%</span>
+        </div>
+        <div class="stock-info">热度：⭐⭐⭐⭐⭐</div>
+        <div class="stock-info">逻辑：算力板块领涨</div>
+    </div>
+
+    <div class="btns">
+        <a href="list.html" class="btn">全部龙头</a>
+        <a href="report.html" class="btn">今日报告</a>
+    </div>
+
+</body>
+</html>
