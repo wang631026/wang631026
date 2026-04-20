@@ -3,99 +3,108 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>龙头猎手 · 每日选股</title>
+    <title>龙头猎手 · 每日精选</title>
     <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
         body {
-            font-family: "PingFang SC", "Microsoft YaHei", sans-serif;
-            background: #f5f7fa;
-            padding: 15px;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background-color: #f5f7fa;
+            margin: 0;
+            padding: 16px;
         }
         .header {
             text-align: center;
-            padding: 15px 0 25px;
-            font-size: 20px;
+            font-size: 24px;
             font-weight: bold;
-            color: #222;
+            margin-bottom: 24px;
         }
-        .card {
+        .stock-card {
             background: white;
             border-radius: 12px;
-            padding: 18px;
+            padding: 16px;
             margin-bottom: 12px;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.06);
-        }
-        .stock-title {
             display: flex;
             justify-content: space-between;
-            font-size: 16px;
-            font-weight: bold;
+            align-items: center;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+        }
+        .stock-name {
+            font-size: 18px;
+            font-weight: 600;
             margin-bottom: 8px;
         }
-        .stock-info {
+        .stock-meta {
             font-size: 14px;
             color: #666;
-            margin-bottom: 6px;
+            margin-bottom: 4px;
         }
-        .red { color: #f23838; }
-        .green { color: #009944; }
-        .star { color: #ff9c00; }
-        .btns {
+        .stock-logic {
+            font-size: 14px;
+            color: #666;
+        }
+        .stock-change {
+            font-size: 20px;
+            font-weight: bold;
+            color: #e53935;
+        }
+        .button-group {
             display: flex;
-            gap: 10px;
-            margin-top: 20px;
+            gap: 12px;
+            margin-top: 24px;
         }
         .btn {
             flex: 1;
-            background: #3b7ef6;
-            color: white;
-            text-align: center;
-            padding: 12px 0;
+            padding: 14px;
+            border: none;
             border-radius: 8px;
-            font-size: 15px;
-            text-decoration: none;
+            font-size: 16px;
+            font-weight: 500;
+            background-color: #2563eb;
+            color: white;
+            cursor: pointer;
         }
     </style>
 </head>
 <body>
-
     <div class="header">📈 龙头猎手 · 每日精选</div>
 
-    <div class="card">
-        <div class="stock-title">
-            <span>贵州茅台 600519</span>
-            <span class="red">+2.35%</span>
-        </div>
-        <div class="stock-info">热度：⭐⭐⭐⭐⭐</div>
-        <div class="stock-info">逻辑：白酒龙头 + 资金流入</div>
+    <div id="stock-list"></div>
+
+    <div class="button-group">
+        <button class="btn" onclick="window.location.href='list.html'">全部龙头</button>
+        <button class="btn" onclick="window.location.href='report.html'">今日报告</button>
     </div>
 
-    <div class="card">
-        <div class="stock-title">
-            <span>宁德时代 300750</span>
-            <span class="red">+1.82%</span>
-        </div>
-        <div class="stock-info">热度：⭐⭐⭐⭐</div>
-        <div class="stock-info">逻辑：新能源赛道企稳</div>
-    </div>
+    <script>
+        // 你的电脑后端地址，这里已经填好了
+        const API_URL = 'http://192.168.2.6:5566/api/stocks';
 
-    <div class="card">
-        <div class="stock-title">
-            <span>中科曙光 603019</span>
-            <span class="red">+3.11%</span>
-        </div>
-        <div class="stock-info">热度：⭐⭐⭐⭐⭐</div>
-        <div class="stock-info">逻辑：算力板块领涨</div>
-    </div>
+        async function loadStocks() {
+            try {
+                const res = await fetch(API_URL);
+                const stocks = await res.json();
+                const container = document.getElementById('stock-list');
+                container.innerHTML = '';
+                stocks.forEach(stock => {
+                    const card = document.createElement('div');
+                    card.className = 'stock-card';
+                    card.innerHTML = `
+                        <div>
+                            <div class="stock-name">${stock.name} ${stock.code}</div>
+                            <div class="stock-meta">热度: ⭐⭐⭐⭐⭐</div>
+                            <div class="stock-logic">逻辑: 手工精选龙头</div>
+                        </div>
+                        <div class="stock-change">${stock.increase}</div>
+                    `;
+                    container.appendChild(card);
+                });
+            } catch (err) {
+                console.error('加载失败:', err);
+                document.getElementById('stock-list').innerHTML = '<div style="text-align:center;padding:20px;color:#666;">数据加载中...</div>';
+            }
+        }
 
-    <div class="btns">
-        <a href="list.html" class="btn">全部龙头</a>
-        <a href="report.html" class="btn">今日报告</a>
-    </div>
-
+        // 页面加载时自动获取数据
+        window.onload = loadStocks;
+    </script>
 </body>
 </html>
