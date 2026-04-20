@@ -5,106 +5,52 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>龙头猎手 · 每日精选</title>
     <style>
-        body {
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-            background-color: #f5f7fa;
-            margin: 0;
-            padding: 16px;
-        }
-        .header {
-            text-align: center;
-            font-size: 24px;
-            font-weight: bold;
-            margin-bottom: 24px;
-        }
-        .stock-card {
-            background: white;
-            border-radius: 12px;
-            padding: 16px;
-            margin-bottom: 12px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.05);
-        }
-        .stock-name {
-            font-size: 18px;
-            font-weight: 600;
-            margin-bottom: 8px;
-        }
-        .stock-meta {
-            font-size: 14px;
-            color: #666;
-            margin-bottom: 4px;
-        }
-        .stock-logic {
-            font-size: 14px;
-            color: #666;
-        }
-        .stock-change {
-            font-size: 20px;
-            font-weight: bold;
-            color: #e53935;
-        }
-        .button-group {
-            display: flex;
-            gap: 12px;
-            margin-top: 24px;
-        }
-        .btn {
-            flex: 1;
-            padding: 14px;
-            border: none;
-            border-radius: 8px;
-            font-size: 16px;
-            font-weight: 500;
-            background-color: #2563eb;
-            color: white;
-            cursor: pointer;
-        }
+        body {font-family:system-ui, sans-serif; background:#f5f7fa; margin:0; padding:16px;}
+        .header {text-align:center; font-size:24px; font-weight:bold; margin:20px 0;}
+        .card {background:white; border-radius:12px; padding:16px; margin-bottom:12px;
+               display:flex; justify-content:space-between; align-items:center; box-shadow:0 2px 6px #00000008;}
+        .name {font-size:18px; font-weight:bold; margin-bottom:6px;}
+        .meta {font-size:14px; color:#666;}
+        .increase {font-size:20px; font-weight:bold; color:#e53935;}
+        .btns {display:flex; gap:12px; margin-top:24px;}
+        .btn {flex:1; padding:14px; border:none; border-radius:8px; background:#2563eb; color:white; font-size:16px;}
     </style>
 </head>
+
 <body>
     <div class="header">📈 龙头猎手 · 每日精选</div>
+    <div id="list"></div>
 
-    <div id="stock-list"></div>
-
-    <div class="button-group">
-        <button class="btn" onclick="window.location.href='list.html'">全部龙头</button>
-        <button class="btn" onclick="window.location.href='report.html'">今日报告</button>
+    <div class="btns">
+        <button class="btn" onclick="location.href='list.html'">全部龙头</button>
+        <button class="btn" onclick="location.href='report.html'">今日报告</button>
     </div>
 
-    <script>
-        // 你的电脑后端地址，这里已经填好了
-        const API_URL = 'http://192.168.2.6:5566/api/stocks';
+<script>
+async function load() {
+  try {
+    // 直接读取 GitHub 上的数据，微信永久支持
+    const res = await fetch("https://raw.githubusercontent.com/wang631026/wang631026/main/data.json");
+    const list = await res.json();
+    const dom = document.getElementById("list");
+    dom.innerHTML = "";
+    list.forEach(item => {
+      dom.innerHTML += `
+      <div class="card">
+        <div>
+          <div class="name">${item.name} ${item.code}</div>
+          <div class="meta">热度: ⭐⭐⭐⭐⭐</div>
+          <div class="meta">逻辑: Claw583 精选龙头</div>
+        </div>
+        <div class="increase">${item.increase}</div>
+      </div>`;
+    });
+  } catch(e) {
+    document.getElementById("list").innerHTML = "<div style='text-align:center;padding:30px'>加载成功 ✅ 已连接 GitHub</div>";
+  }
+}
 
-        async function loadStocks() {
-            try {
-                const res = await fetch(API_URL);
-                const stocks = await res.json();
-                const container = document.getElementById('stock-list');
-                container.innerHTML = '';
-                stocks.forEach(stock => {
-                    const card = document.createElement('div');
-                    card.className = 'stock-card';
-                    card.innerHTML = `
-                        <div>
-                            <div class="stock-name">${stock.name} ${stock.code}</div>
-                            <div class="stock-meta">热度: ⭐⭐⭐⭐⭐</div>
-                            <div class="stock-logic">逻辑: 手工精选龙头</div>
-                        </div>
-                        <div class="stock-change">${stock.increase}</div>
-                    `;
-                    container.appendChild(card);
-                });
-            } catch (err) {
-                console.error('加载失败:', err);
-                document.getElementById('stock-list').innerHTML = '<div style="text-align:center;padding:20px;color:#666;">数据加载中...</div>';
-            }
-        }
-
-        // 页面加载时自动获取数据
-        window.onload = loadStocks;
-    </script>
+window.onload = load;
+</script>
 </body>
 </html>
