@@ -5,86 +5,85 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>今日精选报告</title>
     <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-        body {
-            font-family: "PingFang SC", "Microsoft YaHei", sans-serif;
-            background: #f5f7fa;
-            padding: 15px;
-        }
-        .header {
-            text-align: center;
-            padding: 15px 0;
-            font-size: 18px;
-            font-weight: bold;
-        }
-        .card {
-            background: white;
-            border-radius: 12px;
-            padding: 18px;
-            margin-bottom: 12px;
-            line-height: 1.6;
-        }
-        .title {
-            font-weight: bold;
-            margin-bottom: 8px;
-            color: #222;
-        }
-        .content {
-            color: #444;
-            font-size: 15px;
-        }
-        .copy-btn {
-            background: #3b7ef6;
-            color: white;
-            padding: 12px;
-            text-align: center;
-            border-radius: 8px;
-            margin-top: 10px;
-        }
-        .back {
-            text-align: center;
-            margin-top: 20px;
-        }
-        .back a {
-            color: #3b7ef6;
-            text-decoration: none;
-        }
+        * {margin:0; padding:0; box-sizing:border-box;}
+        body {font-family:system-ui, sans-serif; background:#f7f9fc; padding:16px; color:#222; line-height:1.55;}
+        .title {text-align:center; font-size:24px; font-weight:700; margin:20px 0 24px;}
+        .card {background:#fff; border-radius:14px; padding:18px; margin-bottom:14px; box-shadow:0 2px 8px rgba(0,0,0,0.05);}
+        .stock-name {font-size:19px; font-weight:700; margin-bottom:8px; display:flex; align-items:center; gap:8px;}
+        .code {font-size:15px; color:#666; font-weight:400;}
+        .increase {color:#e63946; font-weight:600;}
+        .line {margin:6px 0; font-size:15px;}
+        .label {display:inline-block; width:72px; color:#555; font-weight:500;}
+        .tips {margin-top:10px; padding-top:10px; border-top:1px dashed #eee; font-size:14px; color:#444;}
+        .back {display:block; margin:30px auto; padding:12px 28px; background:#2563eb; color:#fff; border:none; border-radius:12px; font-size:16px;}
     </style>
 </head>
+
 <body>
+    <div class="title">今日精选龙头报告</div>
+    <div id="report"></div>
+    <button class="back" onclick="history.back()">返回首页</button>
 
-    <div class="header">今日精选报告</div>
+<script>
+async function loadReport() {
+  const container = document.getElementById('report');
+  try {
+    const res = await fetch("https://raw.githubusercontent.com/wang631026/wang631026/main/data.json");
+    const stocks = await res.json();
 
-    <div class="card">
-        <div class="title">市场简述</div>
-        <div class="content">大盘震荡上行，题材活跃，资金聚焦科技、新能源方向。</div>
-    </div>
+    let html = '';
+    stocks.forEach(stock => {
+      // 自动根据涨幅判断强度，不需要手动改代码
+      const increaseText = stock.increase || "0%";
+      const increaseNum = parseFloat(increaseText.replace("+","").replace("%",""));
 
-    <div class="card">
-        <div class="title">今日精选3只</div>
-        <div class="content">
-            600519 贵州茅台<br>
-            300750 宁德时代<br>
-            603019 中科曙光
+      let strength = '';
+      let logic = '';
+      let strategy = '';
+
+      if (increaseNum >= 9) {
+        strength = "极强 · 涨停龙头";
+        logic = "主力资金强势封板，市场情绪高度一致，属于当前主线领涨标的。";
+        strategy = "短线强势，可关注接力机会，高开不板及时离场。";
+      } else if (increaseNum >= 7) {
+        strength = "强势 · 主线中军";
+        logic = "资金流入明显，板块辨识度高，机构游资共同认可。";
+        strategy = "趋势稳健，低吸为主，不追高，波段收益更佳。";
+      } else if (increaseNum >= 4) {
+        strength = "偏强 · 趋势向好";
+        logic = "资金稳步进场，走势健康，处于上升通道。";
+        strategy = "适合持股待涨，回调企稳可加仓。";
+      } else {
+        strength = "温和 · 蓄势整理";
+        logic = "资金有序进场，短期震荡为主，中期趋势向上。";
+        strategy = "耐心持有，等待放量突破，不急于操作。";
+      }
+
+      html += `
+      <div class="card">
+        <div class="stock-name">
+          ${stock.name} <span class="code">${stock.code}</span>
+          <span class="increase">${stock.increase}</span>
         </div>
-        <div class="copy-btn" onclick="copy()">一键复制代码</div>
-    </div>
+        <div class="line"><span class="label">强度评级：</span>${strength}</div>
+        <div class="line"><span class="label">核心逻辑：</span>${logic}</div>
+        <div class="line"><span class="label">操作策略：</span>${strategy}</div>
+        <div class="tips">
+          <strong>Claw583 提示：</strong><br>
+          • 短线看强度，趋势看资金<br>
+          • 不重仓、不追高、不恋战<br>
+          • 严格执行止盈止损
+        </div>
+      </div>`;
+    });
 
-    <div class="back">
-        <a href="index.html">← 返回首页</a>
-    </div>
+    container.innerHTML = html;
+  } catch (e) {
+    container.innerHTML = `<div style="text-align:center;padding:40px">加载中...</div>`;
+  }
+}
 
-    <script>
-        function copy(){
-            let text = "600519\n300750\n603019";
-            navigator.clipboard.writeText(text);
-            alert("复制成功！");
-        }
-    </script>
-
+window.onload = loadReport;
+</script>
 </body>
 </html>
